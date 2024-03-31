@@ -6,6 +6,28 @@ const saltRounds = 10;
 
 const userRouter = express.Router();
 
+/**
+ * @openapi
+ * /user/register:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: User successfully created!
+ *       400:
+ *         description: Required fields missing
+ *       409:
+ *         description: User already exists! Please login
+ */
+
+
 // API to register users
 userRouter.post("/register", async (req, res) => {
   try {
@@ -38,6 +60,52 @@ userRouter.post("/register", async (req, res) => {
     });
   }
 });
+
+/**
+ * @openapi
+ * /user/login:
+ *   post:
+ *     summary: User login
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address.
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: User's password.
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       200:
+ *         description: Logged In Successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Logged In Successfully
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIzNDU2Nzg5LCJuYW1lIjoiSm9zZXBoIn0.OpOSSw7e485LOP5PrzScxHb7SR6sAOMRckfFwi4rp7o
+ *       400:
+ *         description: Email or password field missing
+ *       401:
+ *         description: Invalid credentials
+ *       
+ */
+
 
 // API for users to login
 userRouter.post("/login", async (req, res) => {
@@ -73,6 +141,27 @@ userRouter.post("/login", async (req, res) => {
     token: jwtToken,
   });
 });
+
+/**
+ * @openapi
+ * /user/logout:
+ *   post:
+ *     summary: User logout
+ *     tags: [User]
+ *     description: Logs out the user by clearing the JWT token stored in the cookie.
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Logged out successfully
+ *  
+ */
 
 // API for users to logout
 userRouter.post("/logout", async (req, res) => {

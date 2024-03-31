@@ -1,8 +1,9 @@
 const express = require("express");
-const { connectDB } = require("./database");
+const { connectDB } = require("./utils/database");
 const { userRouter } = require("./routes/User");
-const { verifyAuth } = require("./verifyToken");
+const { verifyAuth } = require("./utils/verifyToken");
 const { dataRoute } = require("./routes/Data");
+const { swaggerInit } = require("./utils/swagger");
 require("dotenv").config();
 const app = express();
 
@@ -24,4 +25,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   connectDB();
   console.log(`Server started at ${PORT}`);
+  swaggerInit(app, PORT);
 });
