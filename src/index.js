@@ -1,4 +1,9 @@
 const express = require("express");
+const { connectDB } = require("./utils/database");
+const { userRouter } = require("./routes/User");
+const { verifyAuth } = require("./utils/verifyToken");
+const { dataRoute } = require("./routes/Data");
+const { swaggerInit } = require("./utils/swagger");
 require("dotenv").config();
 const app = express();
 
@@ -6,12 +11,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/test", (req, res) => {
-  res.send("Hello World!");
-});
+app.use("/user", userRouter);
+app.use("/data", verifyAuth, dataRoute);
 
-app.post("/data", (req, res) => {
-  res.status(201).send(req.body);
+app.get("/test", (req, res) => {
+  res.send("Hello World! 👌");
 });
 
 // Define the server port
@@ -19,5 +23,7 @@ const PORT = process.env.PORT || 3000;
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  connectDB();
+  console.log(`Server started at ${PORT}`);
+  swaggerInit(app, PORT);
 });
