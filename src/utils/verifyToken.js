@@ -11,7 +11,10 @@ const verifyAuth = (req, res, next) => {
     req.userInfo = userInfo;
     next();
   } catch (error) {
-    console.error(error);
+    console.error({
+      message: "Invalid Token",
+      error: error,
+    });
     res.status(400).send({
       message: "Invalid Token",
     });
