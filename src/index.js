@@ -4,6 +4,7 @@ const { userRouter } = require("./routes/User");
 const { verifyAuth } = require("./utils/verifyToken");
 const { dataRoute } = require("./routes/Data");
 const { swaggerInit } = require("./utils/swagger");
+const { etherRouter } = require("./routes/Ether");
 require("dotenv").config();
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/user", userRouter);
 app.use("/data", verifyAuth, dataRoute);
+app.use("/ether", etherRouter);
 
 app.get("/test", (req, res) => {
   res.send("Hello World! 👌");
